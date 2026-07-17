@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node -v; npm -v; try { \\(Get-Command docker -ErrorAction Stop\\).Source } catch { \"no docker\" })"
+    ]
+  }
+}
