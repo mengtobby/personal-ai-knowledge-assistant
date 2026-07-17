@@ -40,6 +40,7 @@ function loadS3Settings(): S3Settings | null {
 export const config = {
   rootDir,
   port: Number(process.env.PORT ?? 8787),
+  engineUrl: process.env.ENGINE_URL || `http://127.0.0.1:${process.env.ENGINE_PORT || 8788}`,
   dataDir: path.resolve(rootDir, process.env.DATA_DIR ?? "./data"),
   appPassword: required("APP_PASSWORD"),
   anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",

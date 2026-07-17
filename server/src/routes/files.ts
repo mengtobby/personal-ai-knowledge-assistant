@@ -3,7 +3,7 @@ import express, { type Router } from "express";
 import multer from "multer";
 import { config } from "../config.js";
 import { db, type FileRow } from "../db.js";
-import { isAllowedFilename, ALLOWED_EXTENSIONS } from "../ingest/parse.js";
+import { isAllowedFilename, ALLOWED_EXTENSIONS } from "../ingest/filetypes.js";
 import { processFile } from "../ingest/pipeline.js";
 import { storage } from "../storage/index.js";
 

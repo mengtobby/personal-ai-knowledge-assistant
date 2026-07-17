@@ -6,7 +6,7 @@ import multer from "multer";
 import { anthropicAvailable } from "./anthropic.js";
 import { authRouter, requireAuth } from "./auth.js";
 import { config } from "./config.js";
-import { initEmbeddings } from "./embeddings.js";
+import { engineHealthy } from "./engine.js";
 import { chatRouter } from "./routes/chat.js";
 import { filesRouter } from "./routes/files.js";
 
@@ -53,8 +53,13 @@ app.listen(config.port, () => {
       "[server] ANTHROPIC_API_KEY is not set — uploads and retrieval work, but chat answers and image/scanned-PDF OCR are disabled."
     );
   }
-  // Warm the embedding model in the background (first run downloads ~90MB).
-  void initEmbeddings()
-    .then(() => console.log("[server] Embedding model ready"))
-    .catch((err) => console.error("[server] Failed to load embedding model:", err));
+  void engineHealthy().then((healthy) => {
+    if (healthy) {
+      console.log(`[server] Ingest engine reachable at ${config.engineUrl}`);
+    } else {
+      console.warn(
+        `[server] Ingest engine is not reachable at ${config.engineUrl} — uploads and chat will fail until it starts (npm run dev:engine).`
+      );
+    }
+  });
 });

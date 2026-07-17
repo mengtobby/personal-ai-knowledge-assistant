@@ -1,5 +1,6 @@
 import { db } from "./db.js";
-import { bufferToVector, cosineSimilarity, embedText } from "./embeddings.js";
+import { engineEmbedText } from "./engine.js";
+import { bufferToVector, cosineSimilarity } from "./vectors.js";
 
 export interface RetrievedChunk {
   chunkId: number;
@@ -29,7 +30,7 @@ interface ChunkWithEmbedding extends Omit<RetrievedChunk, "score"> {
 
 /** Brute-force cosine search over all indexed chunks (fine at personal scale). */
 export async function retrieve(query: string): Promise<RetrievedChunk[]> {
-  const queryVector = await embedText(query);
+  const queryVector = await engineEmbedText(query);
   const rows = listChunks.all() as ChunkWithEmbedding[];
 
   const scored = rows.map((row) => ({
