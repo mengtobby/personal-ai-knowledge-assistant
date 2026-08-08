@@ -1,6 +1,6 @@
 import { useRef, useState, type DragEvent } from "react";
 
-const ACCEPT = ".pdf,.docx,.txt,.md,.csv,.xlsx,.xls,.png,.jpg,.jpeg,.gif,.webp";
+const ACCEPT = ".pdf,.docx,.txt,.md,.csv,.xlsx,.xls,.png,.jpg,.jpeg,.bmp";
 
 export function UploadArea({ onUpload }: { onUpload: (files: File[]) => Promise<void> }) {
   const inputRef = useRef<HTMLInputElement>(null);

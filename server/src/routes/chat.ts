@@ -1,7 +1,6 @@
 import express, { type Router } from "express";
-import { getAnthropic } from "../anthropic.js";
-import { config } from "../config.js";
 import { db, type MessageRow } from "../db.js";
+import { chatComplete } from "../llm.js";
 import { retrieve, type RetrievedChunk } from "../retrieval.js";
 
 export interface Citation {
@@ -64,18 +63,10 @@ async function answerFromChunks(question: string, chunks: RetrievedChunk[]): Pro
     .reverse()
     .map((message) => ({ role: message.role, content: message.content }));
 
-  const response = await getAnthropic().messages.create({
-    model: config.chatModel,
-    max_tokens: 2048,
-    system: buildSystemPrompt(chunks),
-    messages: [...history, { role: "user", content: question }],
-  });
-
-  const answer = response.content
-    .filter((block): block is { type: "text"; text: string } & typeof block => block.type === "text")
-    .map((block) => block.text)
-    .join("\n")
-    .trim();
+  const answer = await chatComplete(buildSystemPrompt(chunks), [
+    ...history,
+    { role: "user", content: question },
+  ]);
 
   if (!answer || answer.includes(NOT_IN_FILES_SENTINEL)) {
     return { content: NOT_FOUND_REPLY, citations: [] };

@@ -3,10 +3,10 @@ import path from "node:path";
 import cookieParser from "cookie-parser";
 import express, { type NextFunction, type Request, type Response } from "express";
 import multer from "multer";
-import { anthropicAvailable } from "./anthropic.js";
 import { authRouter, requireAuth } from "./auth.js";
 import { config } from "./config.js";
 import { engineHealthy } from "./engine.js";
+import { ollamaHealthy } from "./llm.js";
 import { chatRouter } from "./routes/chat.js";
 import { filesRouter } from "./routes/files.js";
 
@@ -14,8 +14,8 @@ const app = express();
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 
-app.get("/api/health", (_req, res) => {
-  res.json({ success: true, anthropicConfigured: anthropicAvailable() });
+app.get("/api/health", async (_req, res) => {
+  res.json({ success: true, ollamaConnected: await ollamaHealthy() });
 });
 
 app.use("/api/auth", authRouter());
@@ -48,11 +48,15 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 app.listen(config.port, () => {
   console.log(`[server] Listening on http://localhost:${config.port}`);
   console.log(`[server] Storage driver: ${config.s3 ? "s3" : "local"}`);
-  if (!anthropicAvailable()) {
-    console.warn(
-      "[server] ANTHROPIC_API_KEY is not set — uploads and retrieval work, but chat answers and image/scanned-PDF OCR are disabled."
-    );
-  }
+  void ollamaHealthy().then((healthy) => {
+    if (healthy) {
+      console.log(`[server] Ollama reachable at ${config.ollamaUrl} (model: ${config.ollamaChatModel})`);
+    } else {
+      console.warn(
+        `[server] Ollama is not reachable at ${config.ollamaUrl} — chat will fail until it's running ("ollama serve").`
+      );
+    }
+  });
   void engineHealthy().then((healthy) => {
     if (healthy) {
       console.log(`[server] Ingest engine reachable at ${config.engineUrl}`);

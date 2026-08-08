@@ -1,6 +1,6 @@
 import path from "node:path";
 
-export const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".gif", ".webp"] as const;
+export const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".bmp"] as const;
 
 export const ALLOWED_EXTENSIONS = [
   ".pdf", ".docx", ".txt", ".md", ".csv", ".xlsx", ".xls",

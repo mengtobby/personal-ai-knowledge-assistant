@@ -1,15 +1,10 @@
-import {
-  anthropicAvailable,
-  isSupportedImageType,
-  transcribeImage,
-  transcribeScannedPdf,
-} from "../anthropic.js";
 import { db, type FileRow } from "../db.js";
 import {
   engineIngest,
   engineProcessText,
   type EngineChunk,
 } from "../engine.js";
+import { isSupportedImageType, transcribeImage, transcribeScannedPdf } from "../ocr.js";
 import { storage } from "../storage/index.js";
 import { vectorToBuffer } from "../vectors.js";
 import { isImageFilename } from "./filetypes.js";
@@ -28,7 +23,7 @@ const insertChunk = db.prepare(
 );
 const deleteChunks = db.prepare("DELETE FROM chunks WHERE file_id = ?");
 
-/** OCR an image via Claude vision, then chunk + embed the text in the engine. */
+/** OCR an image via local Tesseract, then chunk + embed the text in the engine. */
 async function ingestImage(file: FileRow, data: Buffer): Promise<EngineChunk[]> {
   const mediaType = file.mime === "image/jpg" ? "image/jpeg" : file.mime;
   if (!isSupportedImageType(mediaType)) {
@@ -39,13 +34,8 @@ async function ingestImage(file: FileRow, data: Buffer): Promise<EngineChunk[]> 
   return engineProcessText([{ text, location: "image content" }]);
 }
 
-/** OCR a scanned PDF via Claude vision, then chunk + embed the pages in the engine. */
+/** OCR a scanned PDF via local Tesseract, then chunk + embed the pages in the engine. */
 async function ingestScannedPdf(data: Buffer, pageCount: number | null): Promise<EngineChunk[]> {
-  if (!anthropicAvailable()) {
-    throw new Error(
-      "This PDF appears to be scanned (no embedded text). Set ANTHROPIC_API_KEY in .env to enable OCR."
-    );
-  }
   if ((pageCount ?? 0) > MAX_OCR_PAGES || data.byteLength > MAX_OCR_BYTES) {
     throw new Error(`Scanned PDF is too large for OCR (limit: ${MAX_OCR_PAGES} pages / 30MB).`);
   }

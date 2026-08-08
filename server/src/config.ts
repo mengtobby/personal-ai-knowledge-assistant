@@ -43,9 +43,8 @@ export const config = {
   engineUrl: process.env.ENGINE_URL || `http://127.0.0.1:${process.env.ENGINE_PORT || 8788}`,
   dataDir: path.resolve(rootDir, process.env.DATA_DIR ?? "./data"),
   appPassword: required("APP_PASSWORD"),
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
-  chatModel: process.env.CHAT_MODEL ?? "claude-sonnet-5",
-  ocrModel: process.env.OCR_MODEL ?? "claude-haiku-4-5-20251001",
+  ollamaUrl: process.env.OLLAMA_URL || "http://127.0.0.1:11434",
+  ollamaChatModel: process.env.OLLAMA_CHAT_MODEL ?? "llama3.1",
   s3: loadS3Settings(),
   maxUploadBytes: 50 * 1024 * 1024,
 } as const;
