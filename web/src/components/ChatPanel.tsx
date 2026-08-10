@@ -91,11 +91,11 @@ export function ChatPanel({ hasIndexedFiles }: { hasIndexedFiles: boolean }) {
         <input
           value={input}
           onChange={(event) => setInput(event.target.value)}
-          placeholder="Ask a question about your files… testing123"
+          placeholder="Ask a question about your files… "
           disabled={busy}
         />
         <button type="submit" disabled={busy || !input.trim()}>
-          Send
+          Send  
         </button>
       </form>
     </div>
