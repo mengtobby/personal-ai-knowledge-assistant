@@ -1,7 +1,7 @@
 """Ingest engine: document parsing, chunking and embeddings as a local HTTP service.
 
-The TypeScript server owns auth, storage, SQLite and the Anthropic API; this
-service owns the CPU-heavy text processing so it never blocks the API server.
+The TypeScript server owns auth, storage, SQLite and the local Ollama chat API;
+this service owns the CPU-heavy text processing so it never blocks the API server.
 """
 
 import logging

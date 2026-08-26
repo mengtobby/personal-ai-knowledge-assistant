@@ -1,6 +1,6 @@
 """Dispatch a file to the right parser by extension.
 
-Images are handled by the TypeScript server (Claude vision OCR) and never
+Images are handled by the TypeScript server (local Tesseract OCR) and never
 reach the engine; scanned PDFs are detected here and bounced back for OCR.
 """
 
