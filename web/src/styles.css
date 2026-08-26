@@ -24,11 +24,45 @@ body,
   height: 100%;
 }
 
+html {
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
+}
+
 body {
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
   font-size: 15px;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 20px;
+  border: 2px solid var(--bg-panel);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 button {
@@ -64,6 +98,11 @@ input:focus {
   border-color: var(--accent);
 }
 
+input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
 .centered {
   height: 100%;
   display: flex;
@@ -82,6 +121,7 @@ input:focus {
 
 .small {
   font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
 }
 
 .error-banner {
@@ -113,6 +153,7 @@ input:focus {
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
 /* Layout */
@@ -177,6 +218,7 @@ input:focus {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .file-info {
@@ -218,9 +260,13 @@ input:focus {
 }
 
 .icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   color: var(--text-muted);
-  padding: 4px 8px;
+  padding: 6px;
+  border-radius: 8px;
 }
 
 .icon-button:hover:not(:disabled) {

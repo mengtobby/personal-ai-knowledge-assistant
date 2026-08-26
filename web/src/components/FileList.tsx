@@ -46,11 +46,14 @@ export function FileList({
           <button
             className="icon-button"
             title="Delete file"
+            aria-label={`Delete ${file.name}`}
             onClick={() => {
               if (window.confirm(`Delete "${file.name}" and its index?`)) void onDelete(file.id);
             }}
           >
-            ✕
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
           </button>
         </li>
       ))}
