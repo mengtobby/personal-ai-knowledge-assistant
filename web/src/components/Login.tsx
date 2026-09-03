@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { api } from "../api";
+import { LiquidLogo } from "../liquid-logo/LiquidLogo";
 
 export function Login({ onSuccess }: { onSuccess: () => void }) {
   const [password, setPassword] = useState("");
@@ -23,7 +24,10 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="centered">
       <form className="login-card" onSubmit={submit}>
-        <h1 className="app-title">Knowledge Assistant</h1>
+        <div className="brand">
+          <LiquidLogo size={40} mark="K" />
+          <h1 className="app-title">Knowledge Assistant</h1>
+        </div>
         <p className="muted">Enter your password to continue.</p>
         <input
           type="password"
