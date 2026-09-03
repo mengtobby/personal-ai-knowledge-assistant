@@ -4,6 +4,7 @@ import { ChatPanel } from "./components/ChatPanel";
 import { FileList } from "./components/FileList";
 import { Login } from "./components/Login";
 import { UploadArea } from "./components/UploadArea";
+import { LiquidLogo } from "./liquid-logo/LiquidLogo";
 import type { FileEntry } from "./types";
 
 const POLL_MS = 2500;
@@ -69,7 +70,10 @@ export function App() {
   return (
     <div className="layout">
       <aside className="sidebar">
-        <h1 className="app-title">Knowledge Assistant</h1>
+        <div className="brand">
+          <LiquidLogo size={32} mark="K" />
+          <h1 className="app-title">Knowledge Assistant</h1>
+        </div>
         <UploadArea onUpload={handleUpload} />
         {uploadError && <div className="error-banner">{uploadError}</div>}
         <FileList files={files} onDelete={handleDelete} />
