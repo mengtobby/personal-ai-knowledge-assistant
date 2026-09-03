@@ -229,10 +229,17 @@ void main() {
         if (insideLogo) {
             vec4 finalColor = mix(o, vec4(o.rgb * 0.8 + 0.2, logoAlpha), 0.3);
 
+            // The raw pattern above is near-black for much of its cycle, which
+            // is fine as a full-screen background but makes a small glyph
+            // unreadable. Floor the fill so the mark stays legible at every
+            // point in the animation instead of periodically fading out.
+            vec3 fillFloor = vec3(0.31, 0.4, 0.86);
+            finalColor.rgb = max(finalColor.rgb, fillFloor);
+
             float highlight = pow(edge * 1.2, 4.0);
             finalColor.rgb += highlight * vec3(0.6, 0.7, 0.8);
             finalColor.a = min(finalColor.a + 0.4, 1.0);
-            gl_FragColor = finalColor;
+            gl_FragColor = clamp(finalColor, 0.0, 1.0);
         } else {
             discard;
         }
