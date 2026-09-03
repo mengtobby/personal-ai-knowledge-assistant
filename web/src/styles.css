@@ -143,6 +143,27 @@ input::placeholder {
   font-weight: 600;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.liquid-logo,
+.liquid-logo-fallback {
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
+.liquid-logo-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: #fff;
+  font-weight: 700;
+}
+
 /* Login */
 .login-card {
   display: flex;
