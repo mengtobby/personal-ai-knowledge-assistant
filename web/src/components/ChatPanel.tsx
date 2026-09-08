@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { api } from "../api";
+import { Link } from "../router";
 import type { ChatMessage } from "../types";
 
 export function ChatPanel({ hasIndexedFiles }: { hasIndexedFiles: boolean }) {
@@ -60,11 +61,18 @@ export function ChatPanel({ hasIndexedFiles }: { hasIndexedFiles: boolean }) {
 
       <div className="chat-messages">
         {messages.length === 0 && (
-          <p className="muted centered-text">
-            {hasIndexedFiles
-              ? "Ask anything about your uploaded files."
-              : "Upload a file first, then ask questions about it here."}
-          </p>
+          <div className="empty-state">
+            {hasIndexedFiles ? (
+              <p className="muted">Ask anything about your uploaded files.</p>
+            ) : (
+              <>
+                <p className="muted">Upload a file first, then ask questions about it here.</p>
+                <Link to="/files" className="link-button">
+                  Go to Files
+                </Link>
+              </>
+            )}
+          </div>
         )}
         {messages.map((message, index) => (
           <div key={`${message.id}-${index}`} className={`message message-${message.role}`}>
