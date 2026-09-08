@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { api } from "./api";
-import { ChatPanel } from "./components/ChatPanel";
-import { FileList } from "./components/FileList";
 import { Login } from "./components/Login";
-import { UploadArea } from "./components/UploadArea";
-import { LiquidLogo } from "./liquid-logo/LiquidLogo";
+import { NavRail } from "./components/NavRail";
+import { ChatPage } from "./pages/ChatPage";
+import { FilesPage } from "./pages/FilesPage";
+import { useRoute } from "./router";
 import type { FileEntry } from "./types";
 
 const POLL_MS = 2500;
@@ -13,6 +13,7 @@ export function App() {
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [files, setFiles] = useState<FileEntry[]>([]);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const route = useRoute();
 
   useEffect(() => {
     void api.me().then(setAuthed);
@@ -68,19 +69,13 @@ export function App() {
   if (!authed) return <Login onSuccess={() => setAuthed(true)} />;
 
   return (
-    <div className="layout">
-      <aside className="sidebar">
-        <div className="brand">
-          <LiquidLogo size={32} mark="K" />
-          <h1 className="app-title">Knowledge Assistant</h1>
-        </div>
-        <UploadArea onUpload={handleUpload} />
-        {uploadError && <div className="error-banner">{uploadError}</div>}
-        <FileList files={files} onDelete={handleDelete} />
-      </aside>
-      <main className="main">
-        <ChatPanel hasIndexedFiles={files.some((file) => file.status === "indexed")} />
-      </main>
+    <div className="app-shell">
+      <NavRail route={route} fileCount={files.length} />
+      {route === "/files" ? (
+        <FilesPage files={files} uploadError={uploadError} onUpload={handleUpload} onDelete={handleDelete} />
+      ) : (
+        <ChatPage hasIndexedFiles={files.some((file) => file.status === "indexed")} />
+      )}
     </div>
   );
 }
