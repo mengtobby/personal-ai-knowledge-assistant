@@ -99,7 +99,7 @@ export function ChatPanel({ hasIndexedFiles }: { hasIndexedFiles: boolean }) {
         <input
           value={input}
           onChange={(event) => setInput(event.target.value)}
-          placeholder="Ask a question about your files…"
+          placeholder="Ask a question about the uploaded files…"
           disabled={busy}
         />
         <button type="submit" disabled={busy || !input.trim()}>
