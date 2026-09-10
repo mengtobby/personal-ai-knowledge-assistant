@@ -6,6 +6,20 @@ function formatSize(bytes: number): string {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
 
+/** The server stores UTC timestamps without a zone marker; add one so Date parses it as UTC, not local time. */
+function formatRelativeTime(createdAt: string): string {
+  const date = new Date(`${createdAt.replace(" ", "T")}Z`);
+  const seconds = Math.round((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) return "just now";
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.round(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
 const STATUS_LABEL: Record<FileEntry["status"], string> = {
   processing: "Indexing…",
   indexed: "Ready",
@@ -32,7 +46,7 @@ export function FileList({
               {file.name}
             </span>
             <span className="muted small">
-              {formatSize(file.size)}
+              {formatRelativeTime(file.createdAt)} · {formatSize(file.size)}
               {file.status === "indexed" && ` · ${file.chunkCount} chunks`}
               {file.pageCount ? ` · ${file.pageCount} pages` : ""}
             </span>
