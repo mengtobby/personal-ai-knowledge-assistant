@@ -391,14 +391,10 @@ input::placeholder {
 
 .chat-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding-bottom: 14px;
-}
-
-.chat-header h2 {
-  font-size: 17px;
-  font-weight: 600;
+  gap: 16px;
+  padding-bottom: 20px;
 }
 
 .ghost-button {

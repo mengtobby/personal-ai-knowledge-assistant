@@ -51,7 +51,10 @@ export function ChatPanel({ hasIndexedFiles }: { hasIndexedFiles: boolean }) {
   return (
     <div className="chat-panel">
       <div className="chat-header">
-        <h2>Chat with your files</h2>
+        <div className="page-header">
+          <h2>Chat with your files</h2>
+          <p className="muted">Grounded answers with citations — no guessing when it's not in your files.</p>
+        </div>
         {messages.length > 0 && (
           <button className="ghost-button" onClick={() => void clear()}>
             Clear history
